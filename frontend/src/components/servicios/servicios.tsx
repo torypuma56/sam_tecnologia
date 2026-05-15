@@ -1,29 +1,27 @@
+import { useState, useEffect } from 'react'
 import styles from './servicios.module.css'
 
-const serviciosData = [
-  {
-    icono: '📷',
-    nombre: 'Instalación de Cámaras',
-    descripcion: 'Instalación profesional en hogares, negocios y empresas con garantía de calidad.',
-  },
-  {
-    icono: '🔧',
-    nombre: 'Mantenimiento',
-    descripcion: 'Servicio técnico, revisión y mantenimiento preventivo y correctivo.',
-  },
-  {
-    icono: '🖥️',
-    nombre: 'Configuración DVR/NVR',
-    descripcion: 'Configuración y optimización de grabadores para acceso remoto.',
-  },
-  {
-    icono: '🌐',
-    nombre: 'Cableado Estructurado',
-    descripcion: 'Instalación de cableado de red para sistemas de videovigilancia.',
-  },
-]
+type Servicio = {
+  id: number
+  nombre: string
+  descripcion: string
+  icono: string
+  precio_referencial: number | null
+  estado: string
+}
 
 function Servicios() {
+  const [servicios, setServicios] = useState<Servicio[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:3000/servicios/publicos')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setServicios(data.data)
+      })
+      .catch(() => setServicios([]))
+  }, [])
+
   return (
     <section className={styles.servicios} id="servicios">
       <div className={styles.header}>
@@ -31,14 +29,23 @@ function Servicios() {
         <p>Soluciones completas para tu seguridad</p>
       </div>
       <div className={styles.grid}>
-        {serviciosData.map((servicio, index) => (
-          <div key={index} className={styles.card}>
-            <div className={styles.icono}>{servicio.icono}</div>
-            <h3>{servicio.nombre}</h3>
-            <p>{servicio.descripcion}</p>
-            <span className={styles.link}>Más información →</span>
-          </div>
-        ))}
+        {servicios.length === 0 ? (
+          <p className={styles.vacio}>No hay servicios disponibles aún.</p>
+        ) : (
+          servicios.map(servicio => (
+            <div key={servicio.id} className={styles.card}>
+              <div className={styles.icono}>{servicio.icono}</div>
+              <h3>{servicio.nombre}</h3>
+              <p>{servicio.descripcion}</p>
+              {servicio.precio_referencial && (
+                <span className={styles.precio}>
+                  Desde Bs. {servicio.precio_referencial}
+                </span>
+              )}
+              <span className={styles.link}>Más información →</span>
+            </div>
+          ))
+        )}
       </div>
     </section>
   )

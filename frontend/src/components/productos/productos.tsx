@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useCarrito } from '../../context/carritoContext'
-
 import styles from './productos.module.css'
 
 type Producto = {
@@ -26,7 +25,7 @@ function Productos() {
       .catch(() => setProductos([]))
   }, [])
 
-    const handleAgregar = (producto: Producto) => {
+  const handleAgregar = (producto: Producto) => {
     agregarItem({
       id: producto.id,
       nombre: producto.nombre,
@@ -53,11 +52,11 @@ function Productos() {
                 {producto.stock === 0 && (
                   <span className={styles.sinStock}>Sin stock</span>
                 )}
-                <img
-                  src={producto.imagen}
-                  alt={producto.nombre}
-                  className={styles.img}
-                />
+                {producto.imagen ? (
+                  <img src={producto.imagen} alt={producto.nombre} className={styles.img} />
+                ) : (
+                  <div className={styles.sinImagen}>📷</div>
+                )}
               </div>
               <div className={styles.info}>
                 <span className={styles.categoria}>{producto.categoria}</span>
@@ -70,7 +69,7 @@ function Productos() {
                     disabled={producto.stock === 0}
                     onClick={() => handleAgregar(producto)}
                   >
-                    {producto.stock === 0 ? 'Sin stock' : 'Ver Detalles'}
+                    {producto.stock === 0 ? 'Sin stock' : 'Agregar'}
                   </button>
                 </div>
               </div>

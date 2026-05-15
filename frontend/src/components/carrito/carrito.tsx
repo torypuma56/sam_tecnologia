@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { useCarrito } from '../../context/carritoContext'
+import Checkout from '../checkout/checkout'
 import styles from './carrito.module.css'
 
 function Carrito() {
   const { items, quitarItem, actualizarCantidad, vaciarCarrito, total, totalItems } = useCarrito()
   const [abierto, setAbierto] = useState(false)
+  const [checkoutAbierto, setCheckoutAbierto] = useState(false)
 
   return (
     <>
-      {/* Botón flotante */}
+      {checkoutAbierto && (
+        <Checkout onCerrar={() => setCheckoutAbierto(false)} />
+      )}
+
       <button className={styles.btnFlotante} onClick={() => setAbierto(true)}>
         🛒
         {totalItems > 0 && (
@@ -16,15 +21,13 @@ function Carrito() {
         )}
       </button>
 
-      {/* Overlay */}
       {abierto && (
         <div className={styles.overlay} onClick={() => setAbierto(false)} />
       )}
 
-      {/* Panel carrito */}
       <div className={`${styles.panel} ${abierto ? styles.panelAbierto : ''}`}>
         <div className={styles.panelHeader}>
-          <h3>🛒 Carrito ({totalItems})</h3>
+          <h3>Carrito ({totalItems})</h3>
           <button onClick={() => setAbierto(false)} className={styles.btnCerrar}>✕</button>
         </div>
 
@@ -37,7 +40,11 @@ function Carrito() {
             <div className={styles.items}>
               {items.map(item => (
                 <div key={item.id} className={styles.item}>
-                  <img src={item.imagen} alt={item.nombre} className={styles.itemImg} />
+                  {item.imagen ? (
+                    <img src={item.imagen} alt={item.nombre} className={styles.itemImg} />
+                  ) : (
+                    <div className={styles.itemImgPlaceholder}>📷</div>
+                  )}
                   <div className={styles.itemInfo}>
                     <h4>{item.nombre}</h4>
                     <span className={styles.itemPrecio}>Bs. {item.precio}</span>
@@ -58,14 +65,23 @@ function Carrito() {
                 <span className={styles.totalMonto}>Bs. {total.toFixed(2)}</span>
               </div>
               <div className={styles.acciones}>
-                <button className={styles.btnEfectivo}>
-                  💵 Pagar en efectivo
+                <button
+                  className={styles.btnComprar}
+                  onClick={() => {
+                    setAbierto(false)
+                    setCheckoutAbierto(true)
+                  }}
+                >
+                  Proceder al pago
                 </button>
-                <button className={styles.btnQr}>
-                  📱 Pagar con QR
-                </button>
-                <button className={styles.btnCotizar}>
-                  📝 Solicitar cotización
+                <button
+                  className={styles.btnCotizar}
+                  onClick={() => {
+                    setAbierto(false)
+                    window.location.href = '#formulario'
+                  }}
+                >
+                  Solicitar cotización
                 </button>
                 <button className={styles.btnVaciar} onClick={vaciarCarrito}>
                   Vaciar carrito

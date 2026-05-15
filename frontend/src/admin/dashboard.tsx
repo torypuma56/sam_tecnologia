@@ -9,73 +9,109 @@ import AdminConfiguracion from './secciones/adminConfiguracion'
 
 type Seccion = 'dashboard' | 'productos' | 'servicios' | 'cotizaciones' | 'pedidos' | 'configuracion'
 
-
 function Dashboard() {
   const [seccion, setSeccion] = useState<Seccion>('dashboard')
+  const [sidebarAbierto, setSidebarAbierto] = useState(false)
+  const [temaOscuro, setTemaOscuro] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (!token) navigate('/admin/login')
+    document.documentElement.setAttribute('data-theme', 'dark')
   }, [navigate])
+
+  const toggleTema = () => {
+    setTemaOscuro(!temaOscuro)
+    document.documentElement.setAttribute(
+      'data-theme',
+      temaOscuro ? 'light' : 'dark'
+    )
+  }
 
   const cerrarSesion = () => {
     localStorage.removeItem('token')
     navigate('/admin/login')
   }
 
+  const cambiarSeccion = (s: Seccion) => {
+    setSeccion(s)
+    setSidebarAbierto(false)
+  }
+
   return (
     <div className={styles.dashboard}>
+      {/* Navbar móvil */}
+      <div className={styles.navbarMovil}>
+        <span className={styles.logoTexto}>
+          SAM-<span className={styles.accent}>TECNOLOGÍA</span>
+        </span>
+        <button
+          className={styles.hamburger}
+          onClick={() => setSidebarAbierto(!sidebarAbierto)}
+        >
+          {sidebarAbierto ? '✕' : '☰'}
+        </button>
+      </div>
+
+      {/* Overlay móvil */}
+      {sidebarAbierto && (
+        <div
+          className={styles.overlayVisible}
+          onClick={() => setSidebarAbierto(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={styles.sidebar}>
+      <aside className={`${styles.sidebar} ${sidebarAbierto ? styles.sidebarAbierto : ''}`}>
         <div className={styles.sidebarLogo}>
-          <span className={styles.logoTexto}>
-            SAM-<span className={styles.accent}>TECNOLOGÍA</span>
-          </span>
-          <p>Panel Admin</p>
+          <div>
+            <span className={styles.logoTexto}>
+              SAM-<span className={styles.accent}>TECNOLOGÍA</span>
+            </span>
+            <p>Panel Admin</p>
+          </div>
         </div>
 
         <nav className={styles.nav}>
           <p className={styles.navLabel}>GENERAL</p>
           <button
             className={`${styles.navItem} ${seccion === 'dashboard' ? styles.navActivo : ''}`}
-            onClick={() => setSeccion('dashboard')}
+            onClick={() => cambiarSeccion('dashboard')}
           >
             📊 Dashboard
           </button>
           <button
             className={`${styles.navItem} ${seccion === 'cotizaciones' ? styles.navActivo : ''}`}
-            onClick={() => setSeccion('cotizaciones')}
+            onClick={() => cambiarSeccion('cotizaciones')}
           >
             📝 Cotizaciones
           </button>
           <button
             className={`${styles.navItem} ${seccion === 'pedidos' ? styles.navActivo : ''}`}
-            onClick={() => setSeccion('pedidos')}
+            onClick={() => cambiarSeccion('pedidos')}
           >
             🛒 Pedidos
-          </button>
-
-          <button
-            className={`${styles.navItem} ${seccion === 'configuracion' ? styles.navActivo : ''}`}
-            onClick={() => setSeccion('configuracion')}
-          >
-            Configuración
           </button>
 
           <p className={styles.navLabel}>CONTENIDO</p>
           <button
             className={`${styles.navItem} ${seccion === 'productos' ? styles.navActivo : ''}`}
-            onClick={() => setSeccion('productos')}
+            onClick={() => cambiarSeccion('productos')}
           >
             📦 Productos
           </button>
-
           <button
             className={`${styles.navItem} ${seccion === 'servicios' ? styles.navActivo : ''}`}
-            onClick={() => setSeccion('servicios')}
+            onClick={() => cambiarSeccion('servicios')}
           >
             🔧 Servicios
+          </button>
+          <button
+            className={`${styles.navItem} ${seccion === 'configuracion' ? styles.navActivo : ''}`}
+            onClick={() => cambiarSeccion('configuracion')}
+          >
+            ⚙️ Configuracion
           </button>
 
           <p className={styles.navLabel}>SITIO</p>
@@ -84,9 +120,14 @@ function Dashboard() {
           </a>
         </nav>
 
-        <button className={styles.btnCerrar} onClick={cerrarSesion}>
-          🚪 Cerrar sesión
-        </button>
+        <div className={styles.navFooter}>
+          <button className={styles.btnTema} onClick={toggleTema}>
+            {temaOscuro ? '☀️ Modo claro' : '🌙 Modo oscuro'}
+          </button>
+          <button className={styles.btnCerrar} onClick={cerrarSesion}>
+            🚪 Cerrar sesion
+          </button>
+        </div>
       </aside>
 
       {/* Contenido */}
@@ -131,8 +172,10 @@ function ResumenDashboard() {
 
   return (
     <div>
-      <h1 className="titulo">Dashboard</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginTop: '24px' }}>
+      <h1 style={{ fontSize: '24px', fontWeight: '700', color: 'var(--text)', marginBottom: '24px' }}>
+        Dashboard
+      </h1>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px' }}>
         <StatCard titulo="Productos" valor={stats.productos} icono="📦" color="var(--accent)" />
         <StatCard titulo="Servicios" valor={stats.servicios} icono="🔧" color="var(--purple)" />
         <StatCard titulo="Cotizaciones" valor={stats.cotizaciones} icono="📝" color="#f59e0b" />
