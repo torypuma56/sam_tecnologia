@@ -1,0 +1,262 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.btnNuevo {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btnNuevo:hover {
+  opacity: 0.9;
+}
+
+.tabla {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sinImagen {
+  width: 44px;
+  height: 44px;
+  background: var(--bg2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.tablaHeader {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 100px 80px 100px 100px;
+  padding: 12px 16px;
+  background: var(--bg2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tablaFila {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 100px 80px 100px 100px;
+  padding: 12px 16px;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text);
+}
+
+.tablaImg {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.sinStock {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.estado {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.activo {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.inactivo {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.btnEditar, .btnEliminar {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.btnEditar:hover {
+  border-color: var(--accent);
+}
+
+.btnEliminar:hover {
+  border-color: #ef4444;
+}
+
+.vacio {
+  padding: 40px;
+  text-align: center;
+  color: var(--text2);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modalHeader h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.modalHeader button {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.modalBody {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.campo label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.campo input,
+.campo textarea,
+.campo select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus {
+  border-color: var(--accent);
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.preview {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.subiendo {
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.modalFooter {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+  justify-content: flex-end;
+}
+
+.btnCancelar {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btnGuardar {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btnGuardar:disabled {
+  opacity: 0.6;
+}

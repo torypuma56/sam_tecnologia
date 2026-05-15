@@ -1,0 +1,156 @@
+.productos {
+  padding: 80px 64px;
+  background: var(--bg);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.header p {
+  font-size: 15px;
+  color: var(--text2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.vacio {
+  color: var(--text2);
+  text-align: center;
+  grid-column: 1 / -1;
+  padding: 40px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+
+.imgContainer {
+  position: relative;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sinStock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.info {
+  padding: 16px;
+}
+
+.categoria {
+  font-size: 11px;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.info h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 6px 0 8px;
+}
+
+.info p {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.precio {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.btnDetalle {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btnDetalle:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btnDetalle:disabled {
+  border-color: var(--text2);
+  color: var(--text2);
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .productos {
+    padding: 60px 24px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,220 @@
+.header {
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.contenedor {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  height: calc(100vh - 160px);
+}
+
+.lista {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-y: auto;
+}
+
+.vacio {
+  padding: 40px;
+  text-align: center;
+  color: var(--text2);
+}
+
+.item {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.item:hover {
+  background: var(--bg2);
+}
+
+.itemActivo {
+  background: rgba(124, 58, 237, 0.1);
+  border-left: 3px solid var(--purple);
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.itemNombre {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.itemTotal {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.itemMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.estado {
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.pendiente { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.confirmado { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.enviado { background: rgba(124,58,237,0.15); color: #7c3aed; }
+.entregado { background: rgba(16,185,129,0.15); color: #10b981; }
+.cancelado { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+.detalle {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.detalleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.detalleHeader h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.detalleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.infoLabel {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.infoItem span:last-child {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.total {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--accent) !important;
+}
+
+.comprobante {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.comprobante h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.comprobante img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.items {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.items h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.itemProducto {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg2);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.acciones h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.botonesEstado {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btnEstado {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
+.btnPendiente { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.btnConfirmado { background: rgba(59,130,246,0.15); color: #3b82f6; }
+.btnEnviado { background: rgba(124,58,237,0.15); color: #7c3aed; }
+.btnEntregado { background: rgba(16,185,129,0.15); color: #10b981; }
+.btnCancelado { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+.sinSeleccion {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+  font-size: 14px;
+}

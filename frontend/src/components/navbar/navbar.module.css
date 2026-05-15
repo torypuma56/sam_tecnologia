@@ -1,0 +1,167 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5px 32px;
+  background: rgba(10, 14, 26, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .navbar {
+  background: rgba(248, 250, 252, 0.95);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.logo2Img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.logoText {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.logoAccent {
+  color: var(--accent);
+}
+
+.navLinks {
+  display: flex;
+  list-style: none;
+  gap: 28px;
+}
+
+.navLinks a {
+  font-size: 14px;
+  color: var(--text2);
+  transition: color 0.2s;
+}
+
+.navLinks a:hover {
+  color: var(--accent);
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.temaBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 16px;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+
+.temaBtn:hover {
+  border-color: var(--accent);
+}
+
+.btnCotizar {
+  background: var(--purple);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.btnCotizar:hover {
+  opacity: 0.9;
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 18px;
+  color: var(--text);
+}
+
+/* Menu movil */
+.menuMovil {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menuMovil ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.menuMovil a {
+  font-size: 15px;
+  color: var(--text);
+  transition: color 0.2s;
+}
+
+.menuMovil a:hover {
+  color: var(--accent);
+}
+
+.temaMovil {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  color: var(--text);
+  text-align: left;
+}
+
+.btnCotizarMovil {
+  background: var(--purple);
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+
+  .btnCotizar {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
