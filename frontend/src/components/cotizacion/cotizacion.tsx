@@ -10,19 +10,27 @@ function Cotizacion() {
         </div>
         <div className={styles.pasos}>
           <div className={styles.paso}>
-            <div className={styles.pasoIcono}>🛒</div>
+            <div className={styles.pasoIcono}>
+                      <img src="/icon/carrito.gif" alt="Carrito" className={styles.iconoCarrito} />
+
+            </div>
             <span className={styles.pasoTitulo}>Selecciona Productos</span>
             <span className={styles.pasoDesc}>Elige los equipos que necesitas</span>
           </div>
           <span className={styles.flecha}>→</span>
           <div className={styles.paso}>
-            <div className={styles.pasoIcono}>🔧</div>
+            <div className={styles.pasoIcono}>
+                      <img src="/icon/ajuste.gif" alt="Ajuste" className={styles.iconoCarrito} />
+
+            </div>
             <span className={styles.pasoTitulo}>Elige el Servicio</span>
             <span className={styles.pasoDesc}>Selecciona el tipo de instalación</span>
           </div>
           <span className={styles.flecha}>→</span>
           <div className={styles.paso}>
-            <div className={styles.pasoIcono}>📩</div>
+            <div className={styles.pasoIcono}>
+                      <img src="/icon/correo.gif" alt="Correo" className={styles.iconoCarrito} />
+            </div>
             <span className={styles.pasoTitulo}>Envíanos tus Datos</span>
             <span className={styles.pasoDesc}>Recibe tu cotización por WhatsApp</span>
           </div>

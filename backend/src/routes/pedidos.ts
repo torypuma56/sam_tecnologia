@@ -21,17 +21,15 @@ export const pedidosRoutes = new Elysia({ prefix: '/pedidos' })
   })
 
   .post('/', async ({ body }) => {
-    const pedido = await createPedido(body)
+    const pedido = await createPedido(body as any)
     return { success: true, data: pedido }
   }, {
     body: t.Object({
-      nombre:      t.String(),
-      telefono:    t.String(),
-      email:       t.String(),
-      direccion:   t.String(),
-      metodo_pago: t.String(),
-      comprobante: t.Optional(t.String()),
-      total:       t.Number(),
+      cliente_id:   t.Number(),
+      direccion:    t.String(),
+      metodo_pago:  t.String(),
+      comprobante:  t.Optional(t.String()),
+      total:        t.Number(),
       items: t.Array(t.Object({
         producto_id:     t.Number(),
         cantidad:        t.Number(),

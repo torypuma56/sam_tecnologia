@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -32,6 +36,7 @@
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
+  width: 100%;
 }
 
 .tablaHeader {
@@ -44,6 +49,7 @@
   color: var(--text2);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  min-width: 700px;
 }
 
 .tablaFila {
@@ -54,10 +60,11 @@
   border-top: 1px solid var(--border);
   font-size: 14px;
   color: var(--text);
+  min-width: 700px;
 }
 
 .icono {
-  font-size: 24px;
+  font-size: 30px;
 }
 
 .descripcion {
@@ -230,4 +237,12 @@
 
 .btnGuardar:disabled {
   opacity: 0.6;
+}
+@media (max-width: 768px) {
+  .overlay {
+    padding: 16px;  /* ← esto deja espacio en los bordes */
+  }
+  .tabla {
+    overflow-x: auto;
+  }
 }

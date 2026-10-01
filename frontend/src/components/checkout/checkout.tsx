@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useCarrito } from '../../context/carritoContext'
 import PagoQr from '../pagoQr/pagoQr'
 import styles from './checkout.module.css'
+import { API } from '../../config/api'
 
 type CheckoutProps = {
   onCerrar: () => void
@@ -26,7 +27,7 @@ function Checkout({ onCerrar }: CheckoutProps) {
     setError('')
 
     try {
-      const res = await fetch('http://localhost:3000/pedidos/publico', {
+      const res = await fetch(`${API}/pedidos/publico`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

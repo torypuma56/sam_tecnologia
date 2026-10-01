@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './pagoQr.module.css'
+import { API } from '../../config/api'
 
 type PagoQrProps = {
   total: number
@@ -13,7 +14,7 @@ function PagoQr({ total, onConfirmar, onCancelar }: PagoQrProps) {
   const [subiendo, setSubiendo] = useState(false)
 
   useEffect(() => {
-    fetch('http://localhost:3000/configuracion/publica')
+    fetch(`${API}/configuracion/publica`)
       .then(res => res.json())
       .then(data => {
         if (data.success && data.data?.qr_imagen) {
@@ -28,7 +29,7 @@ function PagoQr({ total, onConfirmar, onCancelar }: PagoQrProps) {
     const formData = new FormData()
     formData.append('archivo', archivo)
 
-    const res = await fetch('http://localhost:3000/upload/imagen', {
+    const res = await fetch(`${API}/upload/imagen`, {
       method: 'POST',
       body: formData
     })

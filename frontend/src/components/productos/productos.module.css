@@ -55,7 +55,7 @@
 .imgContainer {
   position: relative;
   height: 160px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,8 +71,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(239, 68, 68, 0.9);
-  color: white;
+  background: var(--error);
+  color: var(--text);
   font-size: 11px;
   padding: 4px 8px;
   border-radius: 6px;
@@ -129,7 +129,7 @@
 
 .btnDetalle:hover:not(:disabled) {
   background: var(--accent);
-  color: #fff;
+  color: var(--text);
 }
 
 .btnDetalle:disabled {

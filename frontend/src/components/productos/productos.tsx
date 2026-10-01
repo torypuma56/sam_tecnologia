@@ -1,29 +1,67 @@
-import { useState, useEffect } from 'react'
-import { useCarrito } from '../../context/carritoContext'
-import styles from './productos.module.css'
+import { useState, useEffect } from "react";
+import { useCarrito } from "../../context/carritoContext";
+import { useBusqueda } from "../../context/busquedaContext";
+import { API } from "../../config/api";
+import styles from "./productos.module.css";
 
 type Producto = {
-  id: number
-  nombre: string
-  descripcion: string
-  precio: number
-  imagen: string
-  stock: number
-  categoria: string
-}
+  id: number;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  imagen: string;
+  stock: number;
+  categoria: string;
+  categoria_id: number;
+};
 
 function Productos() {
-  const [productos, setProductos] = useState<Producto[]>([])
-  const { agregarItem } = useCarrito()
+  const [productos, setProductos] = useState<Producto[]>([]);
+  const [filtrados, setFiltrados] = useState<Producto[]>([]);
+  const [todosProductos, setTodosProductos] = useState<Producto[]>([]);
+  const { agregarItem } = useCarrito();
+  const { busqueda, categoriaSeleccionada } = useBusqueda();
 
   useEffect(() => {
-    fetch('http://localhost:3000/productos/nuevos')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) setProductos(data.data)
+    fetch(`${API}/productos`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setProductos(data.data);
+          setFiltrados(data.data);
+          setTodosProductos(data.data);
+        }
       })
-      .catch(() => setProductos([]))
-  }, [])
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    // Resultados filtrados por búsqueda y/o categoría
+    let resultado = productos;
+
+    if (busqueda.trim()) {
+      resultado = resultado.filter(
+        (p) =>
+          p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+          p.descripcion.toLowerCase().includes(busqueda.toLowerCase()),
+      );
+    }
+
+    if (categoriaSeleccionada) {
+      resultado = resultado.filter(
+        (p) => p.categoria_id === categoriaSeleccionada,
+      );
+    }
+
+    setFiltrados(resultado);
+
+    // Todos los productos (solo filtrados por categoría si está seleccionada)
+    let todos = productos;
+    if (categoriaSeleccionada) {
+      todos = todos.filter((p) => p.categoria_id === categoriaSeleccionada);
+    }
+    setTodosProductos(todos);
+  }, [busqueda, categoriaSeleccionada, productos]);
 
   const handleAgregar = (producto: Producto) => {
     agregarItem({
@@ -32,28 +70,37 @@ function Productos() {
       precio: producto.precio,
       imagen: producto.imagen,
       cantidad: 1,
-      stock: producto.stock
-    })
-  }
+      stock: producto.stock,
+    });
+  };
 
-  return (
-    <section className={styles.productos} id="productos">
-      <div className={styles.header}>
-        <h2>Productos <span className={styles.accent}>Destacados</span></h2>
-        <p>Equipos de alta calidad para tu sistema de seguridad</p>
-      </div>
+  const renderProductos = (items: Producto[], titulo?: string) => (
+    <>
+      {titulo && (
+        <div className={styles.subheader}>
+          <h3>{titulo}</h3>
+        </div>
+      )}
       <div className={styles.grid}>
-        {productos.length === 0 ? (
-          <p className={styles.vacio}>No hay productos disponibles aún.</p>
+        {items.length === 0 ? (
+          <p className={styles.vacio}>
+            {busqueda
+              ? `No se encontraron productos para "${busqueda}"`
+              : "No hay productos disponibles."}
+          </p>
         ) : (
-          productos.map(producto => (
+          items.map((producto) => (
             <div key={producto.id} className={styles.card}>
               <div className={styles.imgContainer}>
                 {producto.stock === 0 && (
                   <span className={styles.sinStock}>Sin stock</span>
                 )}
                 {producto.imagen ? (
-                  <img src={producto.imagen} alt={producto.nombre} className={styles.img} />
+                  <img
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    className={styles.img}
+                  />
                 ) : (
                   <div className={styles.sinImagen}>📷</div>
                 )}
@@ -69,7 +116,7 @@ function Productos() {
                     disabled={producto.stock === 0}
                     onClick={() => handleAgregar(producto)}
                   >
-                    {producto.stock === 0 ? 'Sin stock' : 'Agregar'}
+                    {producto.stock === 0 ? "Sin stock" : "Agregar"}
                   </button>
                 </div>
               </div>
@@ -77,8 +124,59 @@ function Productos() {
           ))
         )}
       </div>
+    </>
+  );
+
+  // Productos que no están en los filtrados
+  const productosOtros = todosProductos.filter(
+    (p) => !filtrados.some((f) => f.id === p.id),
+  );
+
+  return (
+    <section className={styles.productos} id="productos">
+      <div className={styles.header}>
+        <h2>
+          Productos <span className={styles.accent}>Destacados</span>
+        </h2>
+        <p>Equipos de alta calidad para tu sistema de seguridad</p>
+      </div>
+
+      {/* Mostrar resultados de búsqueda si hay búsqueda activa */}
+      {(busqueda.trim() || categoriaSeleccionada) && filtrados.length > 0 && (
+        <div className={styles.seccion}>
+          {renderProductos(
+            filtrados,
+            `Resultados de búsqueda (${filtrados.length})`,
+          )}
+        </div>
+      )}
+
+      {/* Mostrar otros productos si hay búsqueda y quedan otros productos */}
+      {(busqueda.trim() || categoriaSeleccionada) &&
+        productosOtros.length > 0 && (
+          <div className={styles.seccion}>
+            {renderProductos(
+              productosOtros,
+              `Otros productos (${productosOtros.length})`,
+            )}
+          </div>
+        )}
+
+      {/* Si no hay búsqueda, mostrar todos los productos normalmente */}
+      {!busqueda.trim() && !categoriaSeleccionada && (
+        <div className={styles.seccion}>{renderProductos(todosProductos)}</div>
+      )}
+
+      {/* Mensaje si no hay nada */}
+      {filtrados.length === 0 && (busqueda.trim() || categoriaSeleccionada) && (
+        <p className={styles.vacio}>
+          {busqueda
+            ? `No se encontraron productos para "${busqueda}"`
+            : "No hay productos en esta categoría."}
+        </p>
+      )}
     </section>
-  )
+  );
 }
 
-export default Productos
+export default Productos;

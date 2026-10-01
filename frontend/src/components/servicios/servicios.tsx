@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './servicios.module.css'
+import { API } from '../../config/api'
 
 type Servicio = {
   id: number
@@ -14,7 +15,7 @@ function Servicios() {
   const [servicios, setServicios] = useState<Servicio[]>([])
 
   useEffect(() => {
-    fetch('http://localhost:3000/servicios/publicos')
+    fetch(`${API}/servicios/publicos`)
       .then(res => res.json())
       .then(data => {
         if (data.success) setServicios(data.data)

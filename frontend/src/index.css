@@ -16,6 +16,17 @@
   --card: #151e38;
   --border: rgba(0, 212, 255, 0.15);
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+  /* Colores auxiliares */
+  --error: #ef4444;
+  --whatsapp: #25d366;
+  --whatsapp-dark: #20ba5a;
+  --gold: #FFD700;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --accent-10: rgba(0, 212, 255, 0.1);
+  --purple-40: rgba(124, 58, 237, 0.4);
+  --white-5: rgba(255, 255, 255, 0.05);
+  --white-20: rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="light"] {
@@ -29,6 +40,17 @@
   --card: #ffffff;
   --border: rgba(37, 99, 235, 0.15);
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+
+  /* Colores auxiliares */
+  --error: #ef4444;
+  --whatsapp: #25d366;
+  --whatsapp-dark: #20ba5a;
+  --gold: #FFD700;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --accent-10: rgba(37, 99, 235, 0.1);
+  --purple-40: rgba(124, 58, 237, 0.4);
+  --white-5: rgba(0, 0, 0, 0.05);
+  --white-20: rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -48,6 +70,15 @@ button {
   font-family: inherit;
 }
 
+section[id] {
+  scroll-margin-top: 120px;
+}
+
 img {
   max-width: 100%;
+}
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 60px;
+  }
 }

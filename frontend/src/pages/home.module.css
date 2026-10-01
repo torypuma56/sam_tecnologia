@@ -1,0 +1,29 @@
+.carritoFlotante {
+  display: none;
+  position: fixed;
+  bottom: 125px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: var(--purple);
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  z-index: 999;
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--purple-40);
+}
+
+.iconoCarritoFlotante {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .carritoFlotante {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

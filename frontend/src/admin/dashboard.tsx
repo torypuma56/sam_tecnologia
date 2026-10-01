@@ -6,8 +6,10 @@ import AdminServicios from './secciones/adminServicios'
 import AdminCotizaciones from './secciones/adminCotizaciones'
 import AdminPedidos from './secciones/adminPedidos'
 import AdminConfiguracion from './secciones/adminConfiguracion'
+import { API } from '../config/api'
+import AdminCategorias from './secciones/adminCategorias'
 
-type Seccion = 'dashboard' | 'productos' | 'servicios' | 'cotizaciones' | 'pedidos' | 'configuracion'
+type Seccion = 'dashboard' | 'productos' | 'servicios' | 'cotizaciones' | 'pedidos' | 'configuracion' | 'categorias'
 
 function Dashboard() {
   const [seccion, setSeccion] = useState<Seccion>('dashboard')
@@ -101,6 +103,13 @@ function Dashboard() {
           >
             📦 Productos
           </button>
+
+          <button
+           className={`${styles.navItem} ${seccion === 'categorias' ? styles.navActivo : ''}`}
+            onClick={() => cambiarSeccion('categorias')}
+          >
+            🏷️ Categorias
+          </button>
           <button
             className={`${styles.navItem} ${seccion === 'servicios' ? styles.navActivo : ''}`}
             onClick={() => cambiarSeccion('servicios')}
@@ -138,6 +147,7 @@ function Dashboard() {
         {seccion === 'cotizaciones' && <AdminCotizaciones />}
         {seccion === 'pedidos' && <AdminPedidos />}
         {seccion === 'configuracion' && <AdminConfiguracion />}
+        {seccion === 'categorias' && <AdminCategorias />}
       </main>
     </div>
   )
@@ -156,10 +166,10 @@ function ResumenDashboard() {
     const headers = { Authorization: `Bearer ${token}` }
 
     Promise.all([
-      fetch('http://localhost:3000/productos', { headers }).then(r => r.json()),
-      fetch('http://localhost:3000/servicios', { headers }).then(r => r.json()),
-      fetch('http://localhost:3000/cotizaciones', { headers }).then(r => r.json()),
-      fetch('http://localhost:3000/pedidos', { headers }).then(r => r.json()),
+      fetch(`${API}/productos`, { headers }).then(r => r.json()),
+      fetch(`${API}/servicios`, { headers }).then(r => r.json()),
+      fetch(`${API}/cotizaciones`, { headers }).then(r => r.json()),
+      fetch(`${API}/pedidos`, { headers }).then(r => r.json()),
     ]).then(([p, s, c, pe]) => {
       setStats({
         productos: p.data?.length ?? 0,

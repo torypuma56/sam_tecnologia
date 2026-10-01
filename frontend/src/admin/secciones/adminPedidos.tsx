@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './adminPedidos.module.css'
+import { API } from '../../config/api'
 
 type PedidoItem = {
   producto_nombre: string
@@ -10,9 +11,9 @@ type PedidoItem = {
 
 type Pedido = {
   id: number
-  nombre: string
-  telefono: string
-  email: string
+  cliente_nombre: string
+  cliente_telefono: string
+  cliente_email: string
   direccion: string
   metodo_pago: string
   comprobante: string | null
@@ -37,19 +38,19 @@ function AdminPedidos() {
   }, [])
 
   const cargarPedidos = async () => {
-    const res = await fetch('http://localhost:3000/pedidos', { headers })
+    const res = await fetch(`${API}/pedidos`, { headers })
     const data = await res.json()
     if (data.success) setPedidos(data.data)
   }
 
   const verDetalle = async (id: number) => {
-    const res = await fetch(`http://localhost:3000/pedidos/${id}`, { headers })
+    const res = await fetch(`${API}/pedidos/${id}`, { headers })
     const data = await res.json()
     if (data.success) setPedidoDetalle(data.data)
   }
 
   const cambiarEstado = async (id: number, estado: string) => {
-    await fetch(`http://localhost:3000/pedidos/${id}/estado`, {
+    await fetch(`${API}/pedidos/${id}/estado`, {
       method: 'PUT',
       headers,
       body: JSON.stringify({ estado })
@@ -86,7 +87,7 @@ function AdminPedidos() {
                 onClick={() => verDetalle(pedido.id)}
               >
                 <div className={styles.itemHeader}>
-                  <span className={styles.itemNombre}>{pedido.nombre}</span>
+                  <span className={styles.itemNombre}>{pedido.cliente_nombre}</span>
                   <span className={`${styles.estado} ${estadoColor(pedido.estado)}`}>
                     {pedido.estado}
                   </span>
@@ -113,15 +114,15 @@ function AdminPedidos() {
             <div className={styles.detalleInfo}>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Cliente</span>
-                <span>{pedidoDetalle.nombre}</span>
+                <span>{pedidoDetalle.cliente_nombre}</span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Teléfono</span>
-                <span>{pedidoDetalle.telefono}</span>
+                <span>{pedidoDetalle.cliente_telefono}</span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Email</span>
-                <span>{pedidoDetalle.email}</span>
+                <span>{pedidoDetalle.cliente_email}</span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Dirección</span>

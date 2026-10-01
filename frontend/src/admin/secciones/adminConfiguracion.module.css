@@ -111,4 +111,13 @@
   .grid {
     grid-template-columns: 1fr;
   }
+
+  .campo input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .qrPreview {
+    max-width: 100%;
+  }
 }

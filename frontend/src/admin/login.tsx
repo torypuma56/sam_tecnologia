@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './login.module.css'
+import { API } from './../config/api'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -15,7 +16,7 @@ function Login() {
     setError('')
 
     try {
-      const res = await fetch('http://localhost:3000/auth/login', {
+      const res = await fetch(`${API}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -51,7 +52,7 @@ function Login() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              placeholder="admin@samtecnologia.bo"
+              placeholder="samtecnologia10@gmail.com"
               required
             />
           </div>

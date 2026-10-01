@@ -8,20 +8,20 @@ import { pedidosRoutes } from './routes/pedidos'
 import { authRoutes } from './routes/auth'
 import { configuracionRoutes } from './routes/configuracion'
 import { uploadRoutes } from './routes/upload'
+import { clientesRoutes } from './routes/clientes'
+import { ventasMostradorRoutes } from './routes/ventas_mostrador'
 import { authMiddleware } from './middlewares/auth'
-
-
-
 
 const app = new Elysia()
   .use(cors())
   .get('/', () => ({ message: 'SAM-TECNOLOGÍA API ✅' }))
-  
-    .use(authRoutes)
-  .get('/productos/publicos', async () => {
-    const { ProductoModel } = await import('./models/producto')
-    return { success: true, data: await ProductoModel.getAll() }
+  .onError(({ code, error }) => {
+    console.error(`Error ${code}:`, error)
+    return { success: false, message: 'Error interno del servidor' }
   })
+
+  // ✅ Rutas públicas
+  .use(authRoutes)
   .get('/productos/nuevos', async () => {
     const { ProductoModel } = await import('./models/producto')
     return { success: true, data: await ProductoModel.getNuevos() }
@@ -35,14 +35,40 @@ const app = new Elysia()
     return { success: true, data: await ConfiguracionModel.get() }
   })
   .post('/cotizaciones/publica', async ({ body }: any) => {
+    const { ClienteModel } = await import('./models/cliente')
     const { CotizacionModel } = await import('./models/cotizacion')
-    return { success: true, data: await CotizacionModel.create(body) }
+    const clienteId = await ClienteModel.findOrCreate({
+      nombre: body.nombre,
+      telefono: body.telefono,
+      email: body.email
+    })
+    const cotizacionData = {
+      cliente_id: clienteId,
+      mensaje: body.mensaje,
+      items: body.items
+    }
+    return { success: true, data: await CotizacionModel.create(cotizacionData) }
   })
   .post('/pedidos/publico', async ({ body }: any) => {
+    const { ClienteModel } = await import('./models/cliente')
     const { PedidoModel } = await import('./models/pedido')
-    return { success: true, data: await PedidoModel.create(body) }
+    const clienteId = await ClienteModel.findOrCreate({
+      nombre: body.nombre,
+      telefono: body.telefono,
+      email: body.email
+    })
+    const pedidoData = {
+      cliente_id: clienteId,
+      direccion: body.direccion,
+      metodo_pago: body.metodo_pago,
+      comprobante: body.comprobante,
+      total: body.total,
+      items: body.items
+    }
+    return { success: true, data: await PedidoModel.create(pedidoData) }
   })
 
+  // 🔒 Rutas protegidas
   .use(authMiddleware)
   .use(uploadRoutes)
   .use(productosRoutes)
@@ -50,10 +76,10 @@ const app = new Elysia()
   .use(serviciosRoutes)
   .use(cotizacionesRoutes)
   .use(pedidosRoutes)
-  .use(authRoutes)
   .use(configuracionRoutes)
-  
-  
+  .use(clientesRoutes)
+  .use(ventasMostradorRoutes)
+
   .listen(process.env.PORT ?? 3000)
 
 console.log(`🦊 Elysia corriendo en http://localhost:${app.server?.port}`)

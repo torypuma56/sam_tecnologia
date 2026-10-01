@@ -8,7 +8,7 @@ export const uploadImagen = async (archivo: File) => {
 
   const result = await cloudinary.uploader.upload(dataUri, {
     folder: 'sam-tecnologia',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif', 'mp4'],
     transformation: [
       { width: 800, height: 800, crop: 'limit' },
       { quality: 'auto' }

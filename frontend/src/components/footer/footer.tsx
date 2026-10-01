@@ -31,8 +31,8 @@ function Footer() {
         </div>
         <div className={styles.contacto}>
           <h4>Contacto</h4>
-          <p>📞 +591 712 34567</p>
-          <p>📧 info@samtecnologia.bo</p>
+          <p>📞 +591 64337000</p>
+          <p>📧 samtecnologia10@gmail.com</p>
           <p>📍 Sucre, Bolivia</p>
         </div>
       </div>

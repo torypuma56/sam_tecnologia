@@ -6,7 +6,7 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
   .use(
     jwt({
       name: 'jwt',
-      secret: process.env.JWT_SECRET ?? 'sam-tecnologia-secret'
+      secret: process.env.JWT_SECRET!
     })
   )
 

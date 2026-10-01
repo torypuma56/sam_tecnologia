@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useCarrito } from '../../context/carritoContext'
 import styles from './formularioCotizacion.module.css'
+import { API } from '../../config/api'
 
 function FormularioCotizacion() {
   const { items, vaciarCarrito } = useCarrito()
@@ -20,7 +21,7 @@ function FormularioCotizacion() {
     setError('')
 
     try {
-      const res = await fetch('http://localhost:3000/cotizaciones/publica', {
+      const res = await fetch(`${API}/cotizaciones/publica`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

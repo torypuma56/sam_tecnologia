@@ -5,7 +5,7 @@ export class ConfiguracionModel {
   static async get(): Promise<Configuracion | null> {
     const result = await db.execute(`
       SELECT * FROM configuracion
-      ORDER BY id DESC
+      WHERE id = 1
       LIMIT 1
     `)
     return result.rows[0] as unknown as Configuracion ?? null

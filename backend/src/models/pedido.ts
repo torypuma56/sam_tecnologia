@@ -4,15 +4,28 @@ import type { Pedido } from '../types'
 export class PedidoModel {
   static async getAll(): Promise<Pedido[]> {
     const result = await db.execute(`
-      SELECT * FROM pedidos
-      ORDER BY created_at DESC
+      SELECT p.*,
+             c.nombre as cliente_nombre,
+             c.telefono as cliente_telefono,
+             c.email as cliente_email
+      FROM pedidos p
+      LEFT JOIN clientes c ON p.cliente_id = c.id
+      ORDER BY p.created_at DESC
     `)
     return result.rows as unknown as Pedido[]
   }
 
   static async getById(id: number): Promise<Pedido | null> {
     const pedido = await db.execute({
-      sql: `SELECT * FROM pedidos WHERE id = ?`,
+      sql: `
+        SELECT p.*,
+               c.nombre as cliente_nombre,
+               c.telefono as cliente_telefono,
+               c.email as cliente_email
+        FROM pedidos p
+        LEFT JOIN clientes c ON p.cliente_id = c.id
+        WHERE p.id = ?
+      `,
       args: [id]
     })
 
@@ -39,13 +52,11 @@ export class PedidoModel {
   static async create(data: Pedido) {
     const result = await db.execute({
       sql: `
-        INSERT INTO pedidos (nombre, telefono, email, direccion, metodo_pago, comprobante, total)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO pedidos (cliente_id, direccion, metodo_pago, comprobante, total)
+        VALUES (?, ?, ?, ?, ?)
       `,
       args: [
-        data.nombre,
-        data.telefono,
-        data.email,
+        data.cliente_id,
         data.direccion,
         data.metodo_pago,
         data.comprobante ?? null,
@@ -78,20 +89,6 @@ export class PedidoModel {
             WHERE id = ? AND stock >= ?
           `,
           args: [item.cantidad, item.producto_id, item.cantidad]
-        })
-
-        await db.execute({
-          sql: `
-            INSERT INTO ventas (pedido_id, producto_id, cantidad, precio_unit, total)
-            VALUES (?, ?, ?, ?, ?)
-          `,
-          args: [
-            pedidoId,
-            item.producto_id,
-            item.cantidad,
-            item.precio_unitario,
-            item.subtotal
-          ]
         })
       }
     }

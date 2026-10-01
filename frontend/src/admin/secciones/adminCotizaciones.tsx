@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './adminCotizaciones.module.css'
+import { API } from '../../config/api'
 
 type CotizacionItem = {
   producto_nombre: string | null
@@ -9,9 +10,9 @@ type CotizacionItem = {
 
 type Cotizacion = {
   id: number
-  nombre: string
-  telefono: string
-  email: string
+  cliente_nombre: string
+  cliente_telefono: string
+  cliente_email: string
   mensaje: string
   estado: string
   created_at: string
@@ -33,19 +34,19 @@ function AdminCotizaciones() {
   }, [])
 
   const cargarCotizaciones = async () => {
-    const res = await fetch('http://localhost:3000/cotizaciones', { headers })
+    const res = await fetch(`${API}/cotizaciones`, { headers })
     const data = await res.json()
     if (data.success) setCotizaciones(data.data)
   }
 
   const verDetalle = async (id: number) => {
-    const res = await fetch(`http://localhost:3000/cotizaciones/${id}`, { headers })
+    const res = await fetch(`${API}/cotizaciones/${id}`, { headers })
     const data = await res.json()
     if (data.success) setCotizacionDetalle(data.data)
   }
 
   const cambiarEstado = async (id: number, estado: string) => {
-    await fetch(`http://localhost:3000/cotizaciones/${id}/estado`, {
+    await fetch(`${API}/cotizaciones/${id}/estado`, {
       method: 'PUT',
       headers,
       body: JSON.stringify({ estado })
@@ -58,7 +59,7 @@ function AdminCotizaciones() {
 
   const eliminarCotizacion = async (id: number) => {
     if (!confirm('¿Estás seguro de eliminar esta cotización?')) return
-    await fetch(`http://localhost:3000/cotizaciones/${id}`, {
+    await fetch(`${API}/cotizaciones/${id}`, {
       method: 'DELETE',
       headers
     })
@@ -90,12 +91,12 @@ function AdminCotizaciones() {
                 onClick={() => verDetalle(cotizacion.id)}
               >
                 <div className={styles.itemHeader}>
-                  <span className={styles.itemNombre}>{cotizacion.nombre}</span>
+                  <span className={styles.itemNombre}>{cotizacion.cliente_nombre}</span>
                   <span className={`${styles.estado} ${estadoColor(cotizacion.estado)}`}>
                     {cotizacion.estado}
                   </span>
                 </div>
-                <p className={styles.itemEmail}>{cotizacion.email}</p>
+                <p className={styles.itemEmail}>{cotizacion.cliente_email}</p>
                 <p className={styles.itemFecha}>
                   {new Date(cotizacion.created_at).toLocaleDateString('es-BO')}
                 </p>
@@ -118,15 +119,15 @@ function AdminCotizaciones() {
             <div className={styles.detalleInfo}>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Nombre</span>
-                <span>{cotizacionDetalle.nombre}</span>
+                <span>{cotizacionDetalle.cliente_nombre}</span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Teléfono</span>
-                <span>{cotizacionDetalle.telefono}</span>
+                <span>{cotizacionDetalle.cliente_telefono}</span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Email</span>
-                <span>{cotizacionDetalle.email}</span>
+                <span>{cotizacionDetalle.cliente_email}</span>
               </div>
               <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Mensaje</span>
@@ -169,11 +170,12 @@ function AdminCotizaciones() {
                 </button>
               </div>
               
-                href={"https://wa.me/" + cotizacionDetalle.telefono}
+              <a
+                href={"https://wa.me/" + cotizacionDetalle.cliente_telefono}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.btnWhatsapp}
-              <a>
+              >
               💬 Responder por WhatsApp
               </a>
             </div>

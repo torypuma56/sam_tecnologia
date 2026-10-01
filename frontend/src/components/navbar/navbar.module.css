@@ -1,65 +1,109 @@
-.navbar {
+.header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5px 32px;
-  background: rgba(10, 14, 26, 0.95);
-  backdrop-filter: blur(10px);
+}
+
+/* NIVEL 1 */
+.navbar {
+  background: var(--bg2);
   border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
 }
 
 [data-theme="light"] .navbar {
-  background: rgba(248, 250, 252, 0.95);
+  background: var(--bg2);
+}
+
+.navbarContenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 32px;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
-.logo2Img {
-  width: 100px;
-  height: 100px;
+.logoImg {
+  width: 42px;
+  height: 42px;
   object-fit: contain;
-  border-radius: 8px;
+}
+
+[data-theme="dark"] .logoImg {
+  filter: invert(1);
 }
 
 .logoText {
   font-size: 16px;
   font-weight: 600;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .logoAccent {
   color: var(--accent);
 }
 
-.navLinks {
+/* Buscador */
+.buscador {
   display: flex;
-  list-style: none;
-  gap: 28px;
+  flex: 1;
+  max-width: 500px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
 }
 
-.navLinks a {
+.buscador:focus-within {
+  border-color: var(--accent);
+}
+
+.buscadorInput {
+  flex: 1;
+  background: var(--bg2);
+  border: none;
+  padding: 8px 14px;
   font-size: 14px;
+  color: var(--text);
+  outline: none;
+}
+
+.buscadorInput::placeholder {
   color: var(--text2);
-  transition: color 0.2s;
 }
 
-.navLinks a:hover {
-  color: var(--accent);
+.buscadorBtn {
+  background: var(--purple);
+  border: none;
+  padding: 8px 14px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
 
-.navRight {
+.buscadorBtn:hover {
+  opacity: 0.9;
+}
+
+/* Derecha */
+.navDerecha {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .temaBtn {
@@ -69,6 +113,7 @@
   padding: 6px 10px;
   font-size: 16px;
   color: var(--text);
+  cursor: pointer;
   transition: border-color 0.2s;
 }
 
@@ -76,17 +121,19 @@
   border-color: var(--accent);
 }
 
-.btnCotizar {
+.btnAdmin {
   background: var(--purple);
-  color: #fff;
-  padding: 8px 20px;
+  color: var(--text);
+  padding: 7px 16px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
   transition: opacity 0.2s;
 }
 
-.btnCotizar:hover {
+.btnAdmin:hover {
   opacity: 0.9;
 }
 
@@ -98,32 +145,185 @@
   padding: 6px 10px;
   font-size: 18px;
   color: var(--text);
+  cursor: pointer;
 }
 
-/* Menu movil */
-.menuMovil {
+/* NIVEL 2 */
+.navbar2 {
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="light"] .navbar2 {
+  background: var(--bg3);
+}
+
+.navbar2Contenido {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Categorías */
+.categoriasWrapper {
+  position: relative;
+}
+
+.categoriasBtn {
+  background: var(--purple);
+  color: #ffffff ;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.categoriasBtn:hover {
+  opacity: 0.9;
+}
+
+.categoriasDropdown {
   position: absolute;
   top: 100%;
   left: 0;
-  right: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 0 0 10px 10px;
+  min-width: 200px;
+  z-index: 999;
+  box-shadow: var(--shadow);
+}
+
+.categoriaItem {
+  display: block;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.2s;
+  border-bottom: 1px solid var(--border);
+}
+
+.categoriaItem:last-child {
+  border-bottom: none;
+}
+
+.categoriaItem:hover {
+  background: var(--bg3);
+  color: var(--accent);
+}
+
+/* Links navegación */
+.navLinks {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.navLinks a {
+  font-size: 14px;
+  color: var(--text2);
+  text-decoration: none;
+  padding: 10px 12px;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.navLinks a:hover {
+  color: var(--accent);
+}
+
+/* Carrito */
+.carritoBtn {
+  background-color: var(--purple-40);
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carritoBadge {
+  background: var(--accent);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconoCarrito {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Menú móvil */
+.menuMovil {
   background: var(--bg2);
   border-bottom: 1px solid var(--border);
-  padding: 20px 32px;
+  padding: 16px 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+}
+
+.buscadorMovil {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.buscadorMovil input {
+  flex: 1;
+  background: var(--bg);
+  border: none;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+}
+
+.buscadorMovil button {
+  background: var(--purple);
+  border: none;
+  padding: 10px 14px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .menuMovil ul {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 4px;
 }
 
 .menuMovil a {
+  display: block;
   font-size: 15px;
   color: var(--text);
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
   transition: color 0.2s;
 }
 
@@ -139,9 +339,10 @@
   font-size: 14px;
   color: var(--text);
   text-align: left;
+  cursor: pointer;
 }
 
-.btnCotizarMovil {
+.btnAdminMovil {
   background: var(--purple);
   color: #fff;
   padding: 12px;
@@ -149,19 +350,133 @@
   font-size: 14px;
   font-weight: 500;
   text-align: center;
+  text-decoration: none;
+}
+
+/* Navbar inferior móvil */
+.navbarInferior {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .navbarInferior {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    z-index: 999;
+    padding-bottom: env(safe-area-inset-bottom);
+    gap: 0;
+  }
+
+  [data-theme="light"] .navbarInferior {
+    background: var(--bg2);
+  }
+}
+
+.navInferiorItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  position: relative;
+  padding: 0;
+}
+
+.navInferiorItem:hover {
+  color: var(--accent);
+}
+
+.iconoCarritoInferior {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.navInferiorItem span:first-child {
+  font-size: 20px;
+}
+
+.navInferiorBadge {
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  background: var(--accent);
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .navLinks {
+  .navbarContenido {
+    padding: 8px 16px;
+  }
+
+  .buscador {
     display: none;
   }
 
-  .btnCotizar {
+  .btnAdmin {
     display: none;
   }
 
   .hamburger {
     display: block;
+  }
+
+  .navbar2 {
+    display: none;
+  }
+
+  .logoImg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .logoText {
+    font-size: 14px;
+  }
+}
+
+.btnFlotanteMovil {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: var(--purple);
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  z-index: 999;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .btnFlotanteMovil {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

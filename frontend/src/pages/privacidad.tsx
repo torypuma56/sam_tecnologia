@@ -80,8 +80,8 @@ function Privacidad() {
             Si tienes preguntas sobre esta política, contáctanos:
           </p>
           <ul>
-            <li>Email: info@samtecnologia.bo</li>
-            <li>WhatsApp: +591 712 34567</li>
+            <li>Email: samtecnologia10@gmail.com</li>
+            <li>WhatsApp: +591 64337000</li>
             <li>Ubicación: Sucre, Bolivia</li>
           </ul>
         </section>

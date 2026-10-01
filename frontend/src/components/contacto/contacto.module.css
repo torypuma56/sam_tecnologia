@@ -32,7 +32,7 @@
 .itemIcono {
   width: 44px;
   height: 44px;
-  background: rgba(0, 212, 255, 0.1);
+  background: var(--accent-10);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -62,8 +62,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #25d366;
-  color: #fff;
+  background: var(--accent-10);
+  color: var(--whatsapp);
   padding: 12px 24px;
   border-radius: 10px;
   font-size: 15px;
@@ -71,10 +71,18 @@
   transition: opacity 0.2s;
   width: 100%;
   justify-content: center;
+    margin-bottom: 20px;
+}
+
+.iconoWhatsapp{
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
 }
 
 .btnWhatsapp:hover {
   opacity: 0.9;
+ 
 }
 
 .mapa {

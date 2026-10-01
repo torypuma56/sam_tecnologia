@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './adminServicios.module.css'
+import { API } from '../../config/api'
 
 type Servicio = {
   id: number
@@ -35,7 +36,7 @@ function AdminServicios() {
   }, [])
 
   const cargarServicios = async () => {
-    const res = await fetch('http://localhost:3000/servicios', { headers })
+    const res = await fetch(`${API}/servicios`, { headers })
     const data = await res.json()
     if (data.success) setServicios(data.data)
   }
@@ -74,8 +75,8 @@ function AdminServicios() {
     }
 
     const url = servicioEditar
-      ? `http://localhost:3000/servicios/${servicioEditar.id}`
-      : 'http://localhost:3000/servicios'
+      ? `${API}/servicios/${servicioEditar.id}`
+      : `${API}/servicios`
 
     const method = servicioEditar ? 'PUT' : 'POST'
 
@@ -87,7 +88,7 @@ function AdminServicios() {
 
   const eliminarServicio = async (id: number) => {
     if (!confirm('¿Estás seguro de eliminar este servicio?')) return
-    await fetch(`http://localhost:3000/servicios/${id}`, {
+    await fetch(`${API}/servicios/${id}`, {
       method: 'DELETE',
       headers
     })

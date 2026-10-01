@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './adminProductos.module.css'
+import { API } from '../../config/api'
 
 type Producto = {
   id: number
@@ -48,13 +49,13 @@ function AdminProductos() {
   }, [])
 
   const cargarProductos = async () => {
-    const res = await fetch('http://localhost:3000/productos', { headers })
+    const res = await fetch(`${API}/productos`, { headers })
     const data = await res.json()
     if (data.success) setProductos(data.data)
   }
 
   const cargarCategorias = async () => {
-    const res = await fetch('http://localhost:3000/categorias', { headers })
+    const res = await fetch(`${API}/categorias`, { headers })
     const data = await res.json()
     if (data.success) setCategorias(data.data)
   }
@@ -91,7 +92,7 @@ function AdminProductos() {
     const formData = new FormData()
     formData.append('archivo', archivo)
 
-    const res = await fetch('http://localhost:3000/upload/imagen', {
+    const res = await fetch(`${API}/upload/imagen`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData
@@ -117,8 +118,8 @@ function AdminProductos() {
     }
 
     const url = productoEditar
-      ? `http://localhost:3000/productos/${productoEditar.id}`
-      : 'http://localhost:3000/productos'
+      ? `${API}/productos/${productoEditar.id}`
+      : `${API}/productos`
 
     const method = productoEditar ? 'PUT' : 'POST'
 
@@ -130,7 +131,7 @@ function AdminProductos() {
 
   const eliminarProducto = async (id: number) => {
     if (!confirm('Estas seguro de eliminar este producto?')) return
-    await fetch(`http://localhost:3000/productos/${id}`, {
+    await fetch(`${API}/productos/${id}`, {
       method: 'DELETE',
       headers
     })

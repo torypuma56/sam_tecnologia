@@ -110,13 +110,13 @@
 
 .error {
   font-size: 13px;
-  color: #ef4444;
+  color: var(--error);
   text-align: center;
 }
 
 .btnEnviar {
   background: var(--purple);
-  color: #fff;
+  color: var(--text);
   border: none;
   padding: 14px;
   border-radius: 10px;
@@ -162,7 +162,7 @@
 
 .btnNueva {
   background: var(--purple);
-  color: #fff;
+  color: var(--text);
   border: none;
   padding: 12px 24px;
   border-radius: 10px;

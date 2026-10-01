@@ -5,7 +5,7 @@ export const authMiddleware = new Elysia()
   .use(
     jwt({
       name: 'jwt',
-      secret: process.env.JWT_SECRET ?? 'sam-tecnologia-secret'
+      secret: process.env.JWT_SECRET!
     })
   )
   .derive(async ({ jwt, headers, set }) => {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './adminConfiguracion.module.css'
+import { API } from '../../config/api'
 
 function AdminConfiguracion() {
   const [whatsapp, setWhatsapp] = useState('')
@@ -22,7 +23,7 @@ function AdminConfiguracion() {
   }, [])
 
   const cargarConfiguracion = async () => {
-    const res = await fetch('http://localhost:3000/configuracion', { headers })
+    const res = await fetch(`${API}/configuracion`, { headers })
     const data = await res.json()
     if (data.success && data.data) {
       setWhatsapp(data.data.whatsapp || '')
@@ -31,11 +32,12 @@ function AdminConfiguracion() {
   }
 
   const subirQr = async (archivo: File) => {
-    setSubiendo(true)
-    const formData = new FormData()
-    formData.append('archivo', archivo)
+  setSubiendo(true)
+  const formData = new FormData()
+  formData.append('archivo', archivo)
 
-    const res = await fetch('http://localhost:3000/upload/imagen', {
+  try {
+    const res = await fetch(`${API}/upload/imagen`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData
@@ -43,11 +45,15 @@ function AdminConfiguracion() {
     const data = await res.json()
     setSubiendo(false)
     if (data.success) setQrImagen(data.data.url)
+  } catch (err) {
+    console.error('Error:', err)
+    setSubiendo(false)
   }
+}
 
   const guardarConfiguracion = async () => {
     setGuardando(true)
-    await fetch('http://localhost:3000/configuracion', {
+    await fetch(`${API}/configuracion`, {
       method: 'PUT',
       headers,
       body: JSON.stringify({ whatsapp, qr_imagen: qrImagen })
@@ -63,7 +69,7 @@ function AdminConfiguracion() {
       return
     }
 
-    const res = await fetch('http://localhost:3000/auth/login', {
+    const res = await fetch(`${API}/auth/login`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ email: emailAdmin, password: passwordActual })

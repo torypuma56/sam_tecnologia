@@ -3,9 +3,13 @@ import { useCarrito } from '../../context/carritoContext'
 import Checkout from '../checkout/checkout'
 import styles from './carrito.module.css'
 
-function Carrito() {
+type CarritoProps = {
+  abierto: boolean
+  onCerrar: () => void
+}
+
+function Carrito({ abierto, onCerrar }: CarritoProps) {
   const { items, quitarItem, actualizarCantidad, vaciarCarrito, total, totalItems } = useCarrito()
-  const [abierto, setAbierto] = useState(false)
   const [checkoutAbierto, setCheckoutAbierto] = useState(false)
 
   return (
@@ -14,21 +18,14 @@ function Carrito() {
         <Checkout onCerrar={() => setCheckoutAbierto(false)} />
       )}
 
-      <button className={styles.btnFlotante} onClick={() => setAbierto(true)}>
-        🛒
-        {totalItems > 0 && (
-          <span className={styles.badge}>{totalItems}</span>
-        )}
-      </button>
-
       {abierto && (
-        <div className={styles.overlay} onClick={() => setAbierto(false)} />
+        <div className={styles.overlay} onClick={onCerrar} />
       )}
 
       <div className={`${styles.panel} ${abierto ? styles.panelAbierto : ''}`}>
         <div className={styles.panelHeader}>
           <h3>Carrito ({totalItems})</h3>
-          <button onClick={() => setAbierto(false)} className={styles.btnCerrar}>✕</button>
+          <button onClick={onCerrar} className={styles.btnCerrar}>✕</button>
         </div>
 
         {items.length === 0 ? (
@@ -68,7 +65,7 @@ function Carrito() {
                 <button
                   className={styles.btnComprar}
                   onClick={() => {
-                    setAbierto(false)
+                    onCerrar()
                     setCheckoutAbierto(true)
                   }}
                 >
@@ -77,7 +74,7 @@ function Carrito() {
                 <button
                   className={styles.btnCotizar}
                   onClick={() => {
-                    setAbierto(false)
+                    onCerrar()
                     window.location.href = '#formulario'
                   }}
                 >

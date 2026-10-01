@@ -21,14 +21,12 @@ export const cotizacionesRoutes = new Elysia({ prefix: '/cotizaciones' })
   })
 
   .post('/', async ({ body }) => {
-    const cotizacion = await createCotizacion(body)
+    const cotizacion = await createCotizacion(body as any)
     return { success: true, data: cotizacion }
   }, {
     body: t.Object({
-      nombre:   t.String(),
-      telefono: t.String(),
-      email:    t.String(),
-      mensaje:  t.String(),
+      cliente_id: t.Number(),
+      mensaje:    t.String(),
       items: t.Array(t.Object({
         producto_id: t.Optional(t.Number()),
         servicio_id: t.Optional(t.Number()),

@@ -232,3 +232,17 @@
   color: var(--text2);
   font-size: 14px;
 }
+@media (max-width: 768px) {
+  .contenedor {
+    grid-template-columns: 1fr;
+  }
+
+  .lista {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .sinSeleccion {
+    min-height: 200px;
+  }
+}

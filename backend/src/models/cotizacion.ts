@@ -4,15 +4,28 @@ import type { Cotizacion } from '../types'
 export class CotizacionModel {
   static async getAll(): Promise<Cotizacion[]> {
     const result = await db.execute(`
-      SELECT * FROM cotizaciones
-      ORDER BY created_at DESC
+      SELECT co.*,
+             c.nombre as cliente_nombre,
+             c.telefono as cliente_telefono,
+             c.email as cliente_email
+      FROM cotizaciones co
+      LEFT JOIN clientes c ON co.cliente_id = c.id
+      ORDER BY co.created_at DESC
     `)
     return result.rows as unknown as Cotizacion[]
   }
 
   static async getById(id: number): Promise<Cotizacion | null> {
     const cotizacion = await db.execute({
-      sql: `SELECT * FROM cotizaciones WHERE id = ?`,
+      sql: `
+        SELECT co.*,
+               c.nombre as cliente_nombre,
+               c.telefono as cliente_telefono,
+               c.email as cliente_email
+        FROM cotizaciones co
+        LEFT JOIN clientes c ON co.cliente_id = c.id
+        WHERE co.id = ?
+      `,
       args: [id]
     })
 
@@ -40,10 +53,10 @@ export class CotizacionModel {
   static async create(data: Cotizacion) {
     const result = await db.execute({
       sql: `
-        INSERT INTO cotizaciones (nombre, telefono, email, mensaje)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO cotizaciones (cliente_id, mensaje)
+        VALUES (?, ?)
       `,
-      args: [data.nombre, data.telefono, data.email, data.mensaje]
+      args: [data.cliente_id, data.mensaje]
     })
 
     const cotizacionId = Number(result.lastInsertRowid)
