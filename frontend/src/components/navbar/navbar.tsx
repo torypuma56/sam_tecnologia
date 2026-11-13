@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useCarrito } from "../../context/carritoContext";
-import { useBusqueda } from "../../context/busquedaContext";
+import { useCarrito } from "../../hooks/useCarrito";
+import { useBusqueda } from "../../hooks/useBusqueda";
 import { API } from "../../config/api";
 import styles from "./navbar.module.css";
 
@@ -39,12 +39,18 @@ function Navbar({ onAbrirCarrito }: NavbarProps) {
     );
   };
 
+  const irAProductos = () => {
+    document
+      .getElementById("productos")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const handleBusqueda = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputBusqueda.trim()) {
       setBusqueda(inputBusqueda);
       setCategoriaSeleccionada(null);
-      window.location.href = "#productos";
+      irAProductos();
     }
   };
 
@@ -53,7 +59,7 @@ function Navbar({ onAbrirCarrito }: NavbarProps) {
     setBusqueda("");
     setInputBusqueda("");
     setCategoriasAbiertas(false);
-    window.location.href = "#productos";
+    irAProductos();
   };
 
   return (
@@ -220,13 +226,7 @@ function Navbar({ onAbrirCarrito }: NavbarProps) {
           📦
           <span>Productos</span>
         </a>
-        <button className={styles.navInferiorItem} onClick={onAbrirCarrito}>
-          <img src="/icon/carrito.gif" alt="Carrito" className={styles.iconoCarritoInferior} />
-          <span>Carrito</span>
-          {totalItems > 0 && (
-            <span className={styles.navInferiorBadge}>{totalItems}</span>
-          )}
-        </button>
+        
         <a href="#contacto" className={styles.navInferiorItem}>
           📞
           <span>Contacto</span>

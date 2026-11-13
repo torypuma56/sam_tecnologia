@@ -91,10 +91,32 @@
 .vacio {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   color: var(--text2);
   font-size: 15px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.btnVerProductos {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.btnVerProductos:hover {
+  background: var(--bg3);
+  border-color: var(--accent);
 }
 
 .items {
@@ -224,6 +246,18 @@
   font-size: 14px;
   font-weight: 500;
   width: 100%;
+}
+
+.btnComprar {
+  background: var(--accent);
+  color: var(--text);
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
 }
 
 .btnCotizar {

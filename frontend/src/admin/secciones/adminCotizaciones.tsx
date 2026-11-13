@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import styles from './adminCotizaciones.module.css'
 import { API } from '../../config/api'
 
@@ -24,20 +24,26 @@ function AdminCotizaciones() {
   const [cotizacionDetalle, setCotizacionDetalle] = useState<Cotizacion | null>(null)
 
   const token = localStorage.getItem('token')
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
+  const headers = useMemo(
+    () => ({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }),
+    [token]
+  )
+
+  const cargarCotizaciones = useCallback(() => {
+    fetch(`${API}/cotizaciones`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setCotizaciones(data.data)
+      })
+      .catch(() => {})
+  }, [headers])
 
   useEffect(() => {
     cargarCotizaciones()
-  }, [])
-
-  const cargarCotizaciones = async () => {
-    const res = await fetch(`${API}/cotizaciones`, { headers })
-    const data = await res.json()
-    if (data.success) setCotizaciones(data.data)
-  }
+  }, [cargarCotizaciones])
 
   const verDetalle = async (id: number) => {
     const res = await fetch(`${API}/cotizaciones/${id}`, { headers })

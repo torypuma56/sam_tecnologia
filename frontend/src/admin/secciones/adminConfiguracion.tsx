@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import styles from './adminConfiguracion.module.css'
 import { API } from '../../config/api'
 
@@ -13,23 +13,29 @@ function AdminConfiguracion() {
   const [mensaje, setMensaje] = useState('')
 
   const token = localStorage.getItem('token')
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
+  const headers = useMemo(
+    () => ({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }),
+    [token]
+  )
+
+  const cargarConfiguracion = useCallback(() => {
+    fetch(`${API}/configuracion`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.data) {
+          setWhatsapp(data.data.whatsapp || '')
+          setQrImagen(data.data.qr_imagen || '')
+        }
+      })
+      .catch(() => {})
+  }, [headers])
 
   useEffect(() => {
     cargarConfiguracion()
-  }, [])
-
-  const cargarConfiguracion = async () => {
-    const res = await fetch(`${API}/configuracion`, { headers })
-    const data = await res.json()
-    if (data.success && data.data) {
-      setWhatsapp(data.data.whatsapp || '')
-      setQrImagen(data.data.qr_imagen || '')
-    }
-  }
+  }, [cargarConfiguracion])
 
   const subirQr = async (archivo: File) => {
   setSubiendo(true)

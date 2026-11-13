@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useCarrito } from '../../context/carritoContext'
+import { useCarrito } from '../../hooks/useCarrito'
 import Checkout from '../checkout/checkout'
 import styles from './carrito.module.css'
 
@@ -31,6 +31,19 @@ function Carrito({ abierto, onCerrar }: CarritoProps) {
         {items.length === 0 ? (
           <div className={styles.vacio}>
             <p>Tu carrito está vacío</p>
+            <button
+              className={styles.btnVerProductos}
+              onClick={() => {
+                onCerrar()
+                setTimeout(() => {
+                  document
+                    .getElementById('productos')
+                    ?.scrollIntoView({ behavior: 'smooth' })
+                }, 300)
+              }}
+            >
+              + Agregar productos
+            </button>
           </div>
         ) : (
           <>
@@ -62,6 +75,19 @@ function Carrito({ abierto, onCerrar }: CarritoProps) {
                 <span className={styles.totalMonto}>Bs. {total.toFixed(2)}</span>
               </div>
               <div className={styles.acciones}>
+                <button
+                  className={styles.btnVerProductos}
+                  onClick={() => {
+                    onCerrar()
+                    setTimeout(() => {
+                      document
+                        .getElementById('productos')
+                        ?.scrollIntoView({ behavior: 'smooth' })
+                    }, 300)
+                  }}
+                >
+                  + Agregar productos
+                </button>
                 <button
                   className={styles.btnComprar}
                   onClick={() => {

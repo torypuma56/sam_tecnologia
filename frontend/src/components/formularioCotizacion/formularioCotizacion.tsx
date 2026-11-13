@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useCarrito } from '../../context/carritoContext'
+import { useCarrito } from '../../hooks/useCarrito'
 import styles from './formularioCotizacion.module.css'
 import { API } from '../../config/api'
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import styles from './adminPedidos.module.css'
 import { API } from '../../config/api'
 
@@ -28,20 +28,26 @@ function AdminPedidos() {
   const [pedidoDetalle, setPedidoDetalle] = useState<Pedido | null>(null)
 
   const token = localStorage.getItem('token')
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
+  const headers = useMemo(
+    () => ({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }),
+    [token]
+  )
+
+  const cargarPedidos = useCallback(() => {
+    fetch(`${API}/pedidos`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setPedidos(data.data)
+      })
+      .catch(() => {})
+  }, [headers])
 
   useEffect(() => {
     cargarPedidos()
-  }, [])
-
-  const cargarPedidos = async () => {
-    const res = await fetch(`${API}/pedidos`, { headers })
-    const data = await res.json()
-    if (data.success) setPedidos(data.data)
-  }
+  }, [cargarPedidos])
 
   const verDetalle = async (id: number) => {
     const res = await fetch(`${API}/pedidos/${id}`, { headers })

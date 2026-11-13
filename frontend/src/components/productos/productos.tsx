@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useCarrito } from "../../context/carritoContext";
-import { useBusqueda } from "../../context/busquedaContext";
+import { useState, useEffect, useMemo } from "react";
+import { useCarrito } from "../../hooks/useCarrito";
+import { useBusqueda } from "../../hooks/useBusqueda";
 import { API } from "../../config/api";
 import styles from "./productos.module.css";
 
@@ -17,8 +17,6 @@ type Producto = {
 
 function Productos() {
   const [productos, setProductos] = useState<Producto[]>([]);
-  const [filtrados, setFiltrados] = useState<Producto[]>([]);
-  const [todosProductos, setTodosProductos] = useState<Producto[]>([]);
   const { agregarItem } = useCarrito();
   const { busqueda, categoriaSeleccionada } = useBusqueda();
 
@@ -26,17 +24,12 @@ function Productos() {
     fetch(`${API}/productos`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) {
-          setProductos(data.data);
-          setFiltrados(data.data);
-          setTodosProductos(data.data);
-        }
+        if (data.success) setProductos(data.data);
       })
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    // Resultados filtrados por búsqueda y/o categoría
+  const filtrados = useMemo(() => {
     let resultado = productos;
 
     if (busqueda.trim()) {
@@ -53,15 +46,15 @@ function Productos() {
       );
     }
 
-    setFiltrados(resultado);
-
-    // Todos los productos (solo filtrados por categoría si está seleccionada)
-    let todos = productos;
-    if (categoriaSeleccionada) {
-      todos = todos.filter((p) => p.categoria_id === categoriaSeleccionada);
-    }
-    setTodosProductos(todos);
+    return resultado;
   }, [busqueda, categoriaSeleccionada, productos]);
+
+  const todosProductos = useMemo(() => {
+    if (categoriaSeleccionada) {
+      return productos.filter((p) => p.categoria_id === categoriaSeleccionada);
+    }
+    return productos;
+  }, [categoriaSeleccionada, productos]);
 
   const handleAgregar = (producto: Producto) => {
     agregarItem({

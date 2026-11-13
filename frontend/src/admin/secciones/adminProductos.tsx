@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import styles from './adminProductos.module.css'
 import { API } from '../../config/api'
 
@@ -38,27 +38,36 @@ function AdminProductos() {
   })
 
   const token = localStorage.getItem('token')
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
+  const headers = useMemo(
+    () => ({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }),
+    [token]
+  )
+
+  const cargarProductos = useCallback(() => {
+    fetch(`${API}/productos`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setProductos(data.data)
+      })
+      .catch(() => {})
+  }, [headers])
+
+  const cargarCategorias = useCallback(() => {
+    fetch(`${API}/categorias`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setCategorias(data.data)
+      })
+      .catch(() => {})
+  }, [headers])
 
   useEffect(() => {
     cargarProductos()
     cargarCategorias()
-  }, [])
-
-  const cargarProductos = async () => {
-    const res = await fetch(`${API}/productos`, { headers })
-    const data = await res.json()
-    if (data.success) setProductos(data.data)
-  }
-
-  const cargarCategorias = async () => {
-    const res = await fetch(`${API}/categorias`, { headers })
-    const data = await res.json()
-    if (data.success) setCategorias(data.data)
-  }
+  }, [cargarProductos, cargarCategorias])
 
   const abrirModal = (producto?: Producto) => {
     if (producto) {

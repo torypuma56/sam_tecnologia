@@ -1,26 +1,7 @@
-import { createContext, useContext, useState } from 'react'
+import { useState } from 'react'
 import type { ReactNode } from 'react'
-
-type ItemCarrito = {
-  id: number
-  nombre: string
-  precio: number
-  imagen: string
-  cantidad: number
-  stock: number
-}
-
-type CarritoContextType = {
-  items: ItemCarrito[]
-  agregarItem: (item: ItemCarrito) => void
-  quitarItem: (id: number) => void
-  actualizarCantidad: (id: number, cantidad: number) => void
-  vaciarCarrito: () => void
-  total: number
-  totalItems: number
-}
-
-const CarritoContext = createContext<CarritoContextType | null>(null)
+import { CarritoContext } from './carritoStore'
+import type { ItemCarrito } from './carritoStore'
 
 export function CarritoProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ItemCarrito[]>([])
@@ -73,10 +54,4 @@ export function CarritoProvider({ children }: { children: ReactNode }) {
       {children}
     </CarritoContext.Provider>
   )
-}
-
-export const useCarrito = () => {
-  const context = useContext(CarritoContext)
-  if (!context) throw new Error('useCarrito debe usarse dentro de CarritoProvider')
-  return context
 }

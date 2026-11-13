@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import styles from './adminServicios.module.css'
 import { API } from '../../config/api'
 
@@ -26,20 +26,26 @@ function AdminServicios() {
   })
 
   const token = localStorage.getItem('token')
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
+  const headers = useMemo(
+    () => ({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }),
+    [token]
+  )
+
+  const cargarServicios = useCallback(() => {
+    fetch(`${API}/servicios`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setServicios(data.data)
+      })
+      .catch(() => {})
+  }, [headers])
 
   useEffect(() => {
     cargarServicios()
-  }, [])
-
-  const cargarServicios = async () => {
-    const res = await fetch(`${API}/servicios`, { headers })
-    const data = await res.json()
-    if (data.success) setServicios(data.data)
-  }
+  }, [cargarServicios])
 
   const abrirModal = (servicio?: Servicio) => {
     if (servicio) {

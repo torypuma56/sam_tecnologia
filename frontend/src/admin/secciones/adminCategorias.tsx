@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { API } from '../../config/api'
 import styles from './adminCategorias.module.css'
 
@@ -15,20 +15,26 @@ function AdminCategorias() {
   const [cargando, setCargando] = useState(false)
 
   const token = localStorage.getItem('token')
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  }
+  const headers = useMemo(
+    () => ({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }),
+    [token]
+  )
+
+  const cargarCategorias = useCallback(() => {
+    fetch(`${API}/categorias`, { headers })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setCategorias(data.data)
+      })
+      .catch(() => {})
+  }, [headers])
 
   useEffect(() => {
     cargarCategorias()
-  }, [])
-
-  const cargarCategorias = async () => {
-    const res = await fetch(`${API}/categorias`, { headers })
-    const data = await res.json()
-    if (data.success) setCategorias(data.data)
-  }
+  }, [cargarCategorias])
 
   const crearCategoria = async () => {
     if (!nueva.trim()) return
