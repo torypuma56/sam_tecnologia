@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import type { FormEvent } from "react";
 import { useCarrito } from "../../hooks/useCarrito";
 import { useBusqueda } from "../../hooks/useBusqueda";
 import { API } from "../../config/api";
@@ -45,7 +46,7 @@ function Navbar({ onAbrirCarrito }: NavbarProps) {
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleBusqueda = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleBusqueda = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputBusqueda.trim()) {
       setBusqueda(inputBusqueda);
@@ -226,7 +227,13 @@ function Navbar({ onAbrirCarrito }: NavbarProps) {
           📦
           <span>Productos</span>
         </a>
-        
+        <button className={styles.navInferiorItem} onClick={onAbrirCarrito}>
+          <img src="/icon/carrito.gif" alt="Carrito" className={styles.iconoCarritoInferior} />
+          
+          {totalItems > 0 && (
+            <span className={styles.navInferiorBadge}>{totalItems}</span>
+          )}
+        </button>
         <a href="#contacto" className={styles.navInferiorItem}>
           📞
           <span>Contacto</span>
