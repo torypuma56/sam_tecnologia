@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { SubmitEvent } from 'react'
 import { useCarrito } from '../../hooks/useCarrito'
 import styles from './formularioCotizacion.module.css'
 import { API } from '../../config/api'
@@ -15,7 +16,7 @@ function FormularioCotizacion() {
   const [enviado, setEnviado] = useState(false)
   const [error, setError] = useState('')
 
-  const handleEnviar = async (e: React.FormEvent) => {
+  const handleEnviar = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     setEnviando(true)
     setError('')

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { FormEvent } from "react";
+import type { SubmitEvent } from "react";
 import { useCarrito } from "../../hooks/useCarrito";
 import { useBusqueda } from "../../hooks/useBusqueda";
 import { API } from "../../config/api";
@@ -46,7 +46,7 @@ function Navbar({ onAbrirCarrito }: NavbarProps) {
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleBusqueda = (e: FormEvent<HTMLFormElement>) => {
+  const handleBusqueda = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputBusqueda.trim()) {
       setBusqueda(inputBusqueda);

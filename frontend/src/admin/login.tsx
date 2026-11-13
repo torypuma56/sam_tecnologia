@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { SubmitEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './login.module.css'
 import { API } from './../config/api'
@@ -10,7 +11,7 @@ function Login() {
   const [cargando, setCargando] = useState(false)
   const navigate = useNavigate()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     setCargando(true)
     setError('')
