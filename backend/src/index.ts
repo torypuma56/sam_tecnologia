@@ -9,7 +9,6 @@ import { authRoutes } from './routes/auth'
 import { configuracionRoutes } from './routes/configuracion'
 import { uploadRoutes } from './routes/upload'
 import { clientesRoutes } from './routes/clientes'
-import { ventasMostradorRoutes } from './routes/ventas_mostrador'
 import { authMiddleware } from './middlewares/auth'
 
 const app = new Elysia()
@@ -78,7 +77,6 @@ const app = new Elysia()
   .use(pedidosRoutes)
   .use(configuracionRoutes)
   .use(clientesRoutes)
-  .use(ventasMostradorRoutes)
 
   .listen(process.env.PORT ?? 3000)
 

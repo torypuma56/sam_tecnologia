@@ -42,7 +42,7 @@
 }
 
 [data-theme="dark"] .logoImg {
-  filter: invert(1);
+  filter: brightness(0) invert(1);
 }
 
 .logoText {

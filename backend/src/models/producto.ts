@@ -1,106 +1,118 @@
-import { db } from '../config/db'
+import { db } from '../config/db/db'
+import { categorias, productos } from '../config/db/schema'
+import { and, desc, eq, gte, sql } from 'drizzle-orm'
 import type { Producto } from '../types'
 
 export class ProductoModel {
   static async getAll(): Promise<Producto[]> {
-    const result = await db.execute(`
-      SELECT p.*, c.nombre as categoria
-      FROM productos p
-      JOIN categorias c ON p.categoria_id = c.id
-      ORDER BY p.created_at DESC
-    `)
-    return result.rows as unknown as Producto[]
+    const rows = await db
+      .select({
+        id: productos.id,
+        nombre: productos.nombre,
+        descripcion: productos.descripcion,
+        categoria_id: productos.categoria_id,
+        precio: productos.precio,
+        imagen: productos.imagen,
+        stock: productos.stock,
+        estado: productos.estado,
+        created_at: productos.created_at,
+        categoria: categorias.nombre
+      })
+      .from(productos)
+      .innerJoin(categorias, eq(productos.categoria_id, categorias.id))
+      .orderBy(desc(productos.created_at))
+    return rows as unknown as Producto[]
   }
 
   static async getNuevos(): Promise<Producto[]> {
-    const result = await db.execute(`
-      SELECT p.*, c.nombre as categoria
-      FROM productos p
-      JOIN categorias c ON p.categoria_id = c.id
-      WHERE p.created_at >= datetime('now', '-30 days')
-      AND p.estado = 'activo'
-      ORDER BY p.created_at DESC
-      LIMIT 8
-    `)
-    return result.rows as unknown as Producto[]
+    const rows = await db
+      .select({
+        id: productos.id,
+        nombre: productos.nombre,
+        descripcion: productos.descripcion,
+        categoria_id: productos.categoria_id,
+        precio: productos.precio,
+        imagen: productos.imagen,
+        stock: productos.stock,
+        estado: productos.estado,
+        created_at: productos.created_at,
+        categoria: categorias.nombre
+      })
+      .from(productos)
+      .innerJoin(categorias, eq(productos.categoria_id, categorias.id))
+      .where(
+        and(
+          gte(productos.created_at, sql`datetime('now', '-30 days')`),
+          eq(productos.estado, 'activo')
+        )
+      )
+      .orderBy(desc(productos.created_at))
+      .limit(8)
+    return rows as unknown as Producto[]
   }
 
   static async getById(id: number): Promise<Producto | null> {
-    const result = await db.execute({
-      sql: `
-        SELECT p.*, c.nombre as categoria
-        FROM productos p
-        JOIN categorias c ON p.categoria_id = c.id
-        WHERE p.id = ?
-      `,
-      args: [id]
-    })
-    return result.rows[0] as unknown as Producto ?? null
+    const rows = await db
+      .select({
+        id: productos.id,
+        nombre: productos.nombre,
+        descripcion: productos.descripcion,
+        categoria_id: productos.categoria_id,
+        precio: productos.precio,
+        imagen: productos.imagen,
+        stock: productos.stock,
+        estado: productos.estado,
+        created_at: productos.created_at,
+        categoria: categorias.nombre
+      })
+      .from(productos)
+      .innerJoin(categorias, eq(productos.categoria_id, categorias.id))
+      .where(eq(productos.id, id))
+      .limit(1)
+    return (rows[0] as unknown as Producto) ?? null
   }
 
   static async create(data: Producto) {
-    const result = await db.execute({
-      sql: `
-        INSERT INTO productos (nombre, descripcion, categoria_id, precio, imagen, stock, estado)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `,
-      args: [
-        data.nombre,
-        data.descripcion,
-        data.categoria_id,
-        data.precio,
-        data.imagen,
-        data.stock,
-        data.estado ?? 'activo'
-      ]
-    })
-    return result
+    const rows = await db
+      .insert(productos)
+      .values({
+        nombre: data.nombre,
+        descripcion: data.descripcion,
+        categoria_id: data.categoria_id,
+        precio: data.precio,
+        imagen: data.imagen,
+        stock: data.stock,
+        estado: data.estado ?? 'activo'
+      })
+      .returning()
+    return rows[0]
   }
 
   static async update(id: number, data: Partial<Producto>) {
-    const result = await db.execute({
-      sql: `
-        UPDATE productos
-        SET nombre       = COALESCE(?, nombre),
-            descripcion  = COALESCE(?, descripcion),
-            categoria_id = COALESCE(?, categoria_id),
-            precio       = COALESCE(?, precio),
-            imagen       = COALESCE(?, imagen),
-            stock        = COALESCE(?, stock),
-            estado       = COALESCE(?, estado)
-        WHERE id = ?
-      `,
-      args: [
-        data.nombre ?? null,
-        data.descripcion ?? null,
-        data.categoria_id ?? null,
-        data.precio ?? null,
-        data.imagen ?? null,
-        data.stock ?? null,
-        data.estado ?? null,
-        id
-      ]
-    })
-    return result
+    const values: Partial<typeof productos.$inferInsert> = {}
+    if (data.nombre != null) values.nombre = data.nombre
+    if (data.descripcion != null) values.descripcion = data.descripcion
+    if (data.categoria_id != null) values.categoria_id = data.categoria_id
+    if (data.precio != null) values.precio = data.precio
+    if (data.imagen != null) values.imagen = data.imagen
+    if (data.stock != null) values.stock = data.stock
+    if (data.estado != null) values.estado = data.estado
+
+    return await db
+      .update(productos)
+      .set(values)
+      .where(eq(productos.id, id))
+      .returning()
   }
 
   static async delete(id: number) {
-    const result = await db.execute({
-      sql: `DELETE FROM productos WHERE id = ?`,
-      args: [id]
-    })
-    return result
+    return await db.delete(productos).where(eq(productos.id, id))
   }
 
   static async updateStock(id: number, cantidad: number) {
-    const result = await db.execute({
-      sql: `
-        UPDATE productos
-        SET stock = stock - ?
-        WHERE id = ? AND stock >= ?
-      `,
-      args: [cantidad, id, cantidad]
-    })
-    return result
+    return await db
+      .update(productos)
+      .set({ stock: sql`stock - ${cantidad}` })
+      .where(and(eq(productos.id, id), gte(productos.stock, cantidad)))
   }
 }

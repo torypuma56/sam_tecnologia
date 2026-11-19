@@ -97,23 +97,3 @@ export type Configuracion = {
   updated_by?: number
   updated_at?: string
 }
-
-export type VentaMostradorItem = {
-  id?: number
-  venta_id?: number
-  producto_id?: number
-  descripcion_libre?: string
-  cantidad: number
-  precio_unitario: number
-  subtotal: number
-}
-
-export type VentaMostrador = {
-  id?: number
-  admin_id: number
-  cliente_id?: number
-  metodo_pago: string
-  total: number
-  items: VentaMostradorItem[]
-  created_at?: string
-}

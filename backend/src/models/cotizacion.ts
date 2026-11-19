@@ -1,99 +1,103 @@
-import { db } from '../config/db'
+import { db } from '../config/db/db'
+import { clientes, cotizacionItems, cotizaciones, productos, servicios } from '../config/db/schema'
+import { desc, eq } from 'drizzle-orm'
 import type { Cotizacion } from '../types'
 
 export class CotizacionModel {
   static async getAll(): Promise<Cotizacion[]> {
-    const result = await db.execute(`
-      SELECT co.*,
-             c.nombre as cliente_nombre,
-             c.telefono as cliente_telefono,
-             c.email as cliente_email
-      FROM cotizaciones co
-      LEFT JOIN clientes c ON co.cliente_id = c.id
-      ORDER BY co.created_at DESC
-    `)
-    return result.rows as unknown as Cotizacion[]
+    const rows = await db
+      .select({
+        id: cotizaciones.id,
+        cliente_id: cotizaciones.cliente_id,
+        mensaje: cotizaciones.mensaje,
+        estado: cotizaciones.estado,
+        created_at: cotizaciones.created_at,
+        cliente_nombre: clientes.nombre,
+        cliente_telefono: clientes.telefono,
+        cliente_email: clientes.email
+      })
+      .from(cotizaciones)
+      .leftJoin(clientes, eq(cotizaciones.cliente_id, clientes.id))
+      .orderBy(desc(cotizaciones.created_at))
+    return rows as unknown as Cotizacion[]
   }
 
   static async getById(id: number): Promise<Cotizacion | null> {
-    const cotizacion = await db.execute({
-      sql: `
-        SELECT co.*,
-               c.nombre as cliente_nombre,
-               c.telefono as cliente_telefono,
-               c.email as cliente_email
-        FROM cotizaciones co
-        LEFT JOIN clientes c ON co.cliente_id = c.id
-        WHERE co.id = ?
-      `,
-      args: [id]
-    })
+    const cotRows = await db
+      .select({
+        id: cotizaciones.id,
+        cliente_id: cotizaciones.cliente_id,
+        mensaje: cotizaciones.mensaje,
+        estado: cotizaciones.estado,
+        created_at: cotizaciones.created_at,
+        cliente_nombre: clientes.nombre,
+        cliente_telefono: clientes.telefono,
+        cliente_email: clientes.email
+      })
+      .from(cotizaciones)
+      .leftJoin(clientes, eq(cotizaciones.cliente_id, clientes.id))
+      .where(eq(cotizaciones.id, id))
+      .limit(1)
 
-    const items = await db.execute({
-      sql: `
-        SELECT ci.*,
-               p.nombre as producto_nombre,
-               s.nombre as servicio_nombre
-        FROM cotizacion_items ci
-        LEFT JOIN productos p ON ci.producto_id = p.id
-        LEFT JOIN servicios s ON ci.servicio_id = s.id
-        WHERE ci.cotizacion_id = ?
-      `,
-      args: [id]
-    })
+    const cotizacion = cotRows[0]
+    if (!cotizacion) return null
 
-    if (!cotizacion.rows[0]) return null
+    const items = await db
+      .select({
+        id: cotizacionItems.id,
+        cotizacion_id: cotizacionItems.cotizacion_id,
+        producto_id: cotizacionItems.producto_id,
+        servicio_id: cotizacionItems.servicio_id,
+        cantidad: cotizacionItems.cantidad,
+        producto_nombre: productos.nombre,
+        servicio_nombre: servicios.nombre
+      })
+      .from(cotizacionItems)
+      .leftJoin(productos, eq(cotizacionItems.producto_id, productos.id))
+      .leftJoin(servicios, eq(cotizacionItems.servicio_id, servicios.id))
+      .where(eq(cotizacionItems.cotizacion_id, id))
 
     return {
-      ...cotizacion.rows[0],
-      items: items.rows
+      ...cotizacion,
+      items
     } as unknown as Cotizacion
   }
 
   static async create(data: Cotizacion) {
-    const result = await db.execute({
-      sql: `
-        INSERT INTO cotizaciones (cliente_id, mensaje)
-        VALUES (?, ?)
-      `,
-      args: [data.cliente_id, data.mensaje]
-    })
-
-    const cotizacionId = Number(result.lastInsertRowid)
-
-    if (data.items.length > 0) {
-      for (const item of data.items) {
-        await db.execute({
-          sql: `
-            INSERT INTO cotizacion_items (cotizacion_id, producto_id, servicio_id, cantidad)
-            VALUES (?, ?, ?, ?)
-          `,
-          args: [
-            cotizacionId,
-            item.producto_id ?? null,
-            item.servicio_id ?? null,
-            item.cantidad
-          ]
+    return await db.transaction(async (tx) => {
+      const inserted = await tx
+        .insert(cotizaciones)
+        .values({
+          cliente_id: data.cliente_id,
+          mensaje: data.mensaje
         })
-      }
-    }
+        .returning()
 
-    return result
+      const cotizacionId = inserted[0]!.id
+
+      if (data.items.length > 0) {
+        await tx.insert(cotizacionItems).values(
+          data.items.map((item) => ({
+            cotizacion_id: cotizacionId,
+            producto_id: item.producto_id ?? null,
+            servicio_id: item.servicio_id ?? null,
+            cantidad: item.cantidad
+          }))
+        )
+      }
+
+      return inserted[0]
+    })
   }
 
   static async updateEstado(id: number, estado: string) {
-    const result = await db.execute({
-      sql: `UPDATE cotizaciones SET estado = ? WHERE id = ?`,
-      args: [estado, id]
-    })
-    return result
+    return await db
+      .update(cotizaciones)
+      .set({ estado })
+      .where(eq(cotizaciones.id, id))
   }
 
   static async delete(id: number) {
-    const result = await db.execute({
-      sql: `DELETE FROM cotizaciones WHERE id = ?`,
-      args: [id]
-    })
-    return result
+    return await db.delete(cotizaciones).where(eq(cotizaciones.id, id))
   }
 }

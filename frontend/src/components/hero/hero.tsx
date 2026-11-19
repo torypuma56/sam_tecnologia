@@ -39,22 +39,6 @@ function Hero() {
             Ver Servicios
           </a>
         </div>
-        <div className={styles.stats}>
-          <div className={styles.stat}>
-            <span className={styles.statNum}>50+</span>
-            <span className={styles.statLabel}>Instalaciones</span>
-          </div>
-          <div className={styles.statDivider}></div>
-          <div className={styles.stat}>
-            <span className={styles.statNum}>4★</span>
-            <span className={styles.statLabel}>Calificación</span>
-          </div>
-          <div className={styles.statDivider}></div>
-          <div className={styles.stat}>
-            <span className={styles.statNum}>12/H</span>
-            <span className={styles.statLabel}>Soporte técnico</span>
-          </div>
-        </div>
       </div>
 
       <div className={styles.imagen}>
